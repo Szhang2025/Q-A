@@ -9,8 +9,14 @@
 <body>
   <main class="container">
     <header>
-      <h1>Student Q&A & Feedback</h1>
-      <p>Ask a question, upload supporting material, and check instructor feedback.</p>
+      <!-- Logo -->
+      <div class="logo-container">
+        <img src="logo.png" alt="Statistics Logo" class="logo">
+        <div class="header-text">
+          <h1>Student Q&A & Feedback</h1>
+          <p>Ask a question, upload supporting material, and check instructor feedback.</p>
+        </div>
+      </div>
     </header>
 
     <!-- Student Section -->
@@ -94,6 +100,26 @@
             <button type="submit" style="background: #059669;">Submit Feedback</button>
           </form>
           <div id="feedbackSubmitResult" class="result hidden"></div>
+        </div>
+
+        <!-- Change Password Section -->
+        <div style="border-top: 2px solid #e5e7eb; padding-top: 20px; margin-top: 20px;">
+          <h3>🔑 Change Password</h3>
+          <form id="changePasswordForm">
+            <div class="grid">
+              <label>Current Password
+                <input type="password" id="currentPassword" required>
+              </label>
+              <label>New Password
+                <input type="password" id="newPassword" required minlength="6">
+              </label>
+            </div>
+            <label>Confirm New Password
+              <input type="password" id="confirmPassword" required>
+            </label>
+            <button type="submit" style="background: #dc2626;">Change Password</button>
+          </form>
+          <div id="passwordChangeResult" class="result hidden"></div>
         </div>
       </div>
     </section>
