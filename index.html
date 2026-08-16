@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Student Q&A & Feedback</title><link rel="stylesheet" href="style.css"></head>
+<body><main class="container"><header><h1>Student Q&A & Feedback</h1><p>Ask a question, upload supporting material, and check instructor feedback.</p></header>
+<section class="card"><h2>Submit a Question</h2><form id="questionForm"><div class="grid">
+<label>Student Name<input id="studentName" required></label><label>Student ID<input id="studentId" required></label>
+<label>Email<input id="studentEmail" type="email" required></label><label>Course<input id="course" placeholder="e.g. STAT 353" required></label></div>
+<label>Question<textarea id="question" rows="7" required placeholder="Type your question here..."></textarea></label>
+<label>Upload files<input id="files" type="file" multiple accept=".pdf,.doc,.docx,.csv,.png,.jpg,.jpeg,.gif,.webp"></label>
+<p class="hint">Accepted: PDF, Word, CSV, and common image files. Maximum 10 MB per file.</p><button id="submitBtn">Submit Question</button></form><div id="submitResult" class="result hidden"></div></section>
+<section class="card"><h2>Check My Feedback</h2><form id="feedbackForm"><div class="grid"><label>Submission ID<input id="feedbackId" placeholder="e.g. S-20260816-AB12CD" required></label><label>Email<input id="feedbackEmail" type="email" required></label></div><button>Check Feedback</button></form><div id="feedbackResult" class="result hidden"></div></section></main><script src="app.js"></script></body></html>
