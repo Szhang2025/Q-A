@@ -1,4 +1,4 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbyxW4heiKhXVEcyh-DJ-CXE_fkAR3CMD2Gei9QU0b9v8Jh7HsxS4P2C1zAwWWT7JGtBBg/exec";
+const API_URL = "https://script.google.com/macros/s/YOUR_ACTUAL_URL_HERE/exec";
 
 function showResult(el, html, error = false) {
   el.innerHTML = html;
@@ -7,7 +7,10 @@ function showResult(el, html, error = false) {
 }
 
 async function callApi(action, payload) {
-  if (API_URL.includes("PASTE_YOUR")) throw new Error("Set API_URL in app.js");
+  if (API_URL.includes("YOUR_ACTUAL_URL_HERE")) {
+    alert("⚠️ Please set your API_URL in app.js");
+    throw new Error("Set API_URL in app.js");
+  }
   const r = await fetch(API_URL, {
     method: "POST",
     headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -44,6 +47,17 @@ function switchTab(tab) {
   document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
 }
 
+// Load public stats on page load
+async function loadPublicStats() {
+  try {
+    const data = await callApi('getStats', {});
+    document.getElementById('publicTotal').textContent = data.total || 0;
+    document.getElementById('publicPending').textContent = data.pending || 0;
+  } catch(e) {
+    console.log('Stats load error:', e);
+  }
+}
+
 document.getElementById("questionForm").addEventListener("submit", async e => {
   e.preventDefault();
   const b = document.getElementById("submitBtn");
@@ -66,6 +80,7 @@ document.getElementById("questionForm").addEventListener("submit", async e => {
     });
     showResult(out, `✅ Submitted!<br><strong>Your ID:</strong> ${esc(d.submissionId)}<br><small>Save this ID to check feedback.</small>`);
     e.target.reset();
+    loadPublicStats(); // Refresh stats
   } catch (err) {
     showResult(out, `❌ ${esc(err.message)}`, true);
   } finally {
@@ -184,6 +199,9 @@ async function loadSubmissionForFeedback(submissionId) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+  // Load public stats
+  loadPublicStats();
+  
   const feedbackForm = document.getElementById('instructorFeedbackForm');
   if (feedbackForm) {
     feedbackForm.addEventListener('submit', async function(e) {
@@ -203,9 +221,10 @@ document.addEventListener('DOMContentLoaded', function() {
           fileData = { name: file.name, mimeType: file.type || 'application/octet-stream', data: await fileToBase64(file) };
         }
         await callApi('submitFeedback', { submissionId, feedback, file: fileData, password: currentPassword });
-        showResult(resultEl, '✅ Feedback submitted!', false);
+        showResult(resultEl, '✅ Feedback submitted! Email sent to student.', false);
         fileInput.value = '';
         loadSubmissions();
+        loadPublicStats(); // Refresh stats
       } catch (err) {
         showResult(resultEl, `❌ ${esc(err.message)}`, true);
       } finally {
