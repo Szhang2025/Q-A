@@ -7,10 +7,6 @@ function showResult(el, html, error = false) {
 }
 
 async function callApi(action, payload) {
-  if (API_URL.includes("YOUR_ACTUAL_URL_HERE")) {
-    alert("⚠️ Please set your API_URL in app.js");
-    throw new Error("Set API_URL in app.js");
-  }
   const r = await fetch(API_URL, {
     method: "POST",
     headers: { "Content-Type": "text/plain;charset=utf-8" },
