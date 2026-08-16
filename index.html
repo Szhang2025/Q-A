@@ -2,127 +2,126 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <title>Student Q&A & Feedback</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <main class="container">
     <header>
-      <!-- Logo -->
       <div class="logo-container">
-        <img src="logo.png" alt="Statistics Logo" class="logo">
+        <img src="logo.png" alt="Logo" class="logo">
         <div class="header-text">
-          <h1>Student Q&A & Feedback</h1>
-          <p>Ask a question, upload supporting material, and check instructor feedback.</p>
+          <h1>Q&A Feedback</h1>
+          <p>Ask questions & get instructor feedback</p>
         </div>
       </div>
     </header>
 
-    <!-- Student Section -->
-    <section class="card">
-      <h2>Submit a Question</h2>
-      <form id="questionForm">
-        <div class="grid">
-          <label>Student Name<input id="studentName" required></label>
-          <label>Student ID<input id="studentId" required></label>
-          <label>Email<input id="studentEmail" type="email" required></label>
-          <label>Course<input id="course" placeholder="e.g. STAT 353" required></label>
+    <div class="tab-nav">
+      <button class="tab-btn active" data-tab="student" onclick="switchTab('student')">
+        <span class="tab-icon">📝</span>
+        <span class="tab-label">Ask</span>
+      </button>
+      <button class="tab-btn" data-tab="feedback" onclick="switchTab('feedback')">
+        <span class="tab-icon">📋</span>
+        <span class="tab-label">Check</span>
+      </button>
+      <button class="tab-btn" data-tab="instructor" onclick="switchTab('instructor')">
+        <span class="tab-icon">👨‍🏫</span>
+        <span class="tab-label">Instructor</span>
+      </button>
+    </div>
+
+    <div id="tab-student" class="tab-content active">
+      <section class="card">
+        <h2>Submit a Question</h2>
+        <form id="questionForm">
+          <label>Student Name <input id="studentName" required></label>
+          <label>Student ID <input id="studentId" required></label>
+          <label>Email <input id="studentEmail" type="email" required></label>
+          <label>Course <input id="course" placeholder="e.g. STAT 353" required></label>
+          <label>Question <textarea id="question" rows="5" required placeholder="Type your question here..."></textarea></label>
+          <label>Upload files <input id="files" type="file" multiple accept=".pdf,.doc,.docx,.csv,.png,.jpg,.jpeg,.gif,.webp"></label>
+          <p class="hint">📎 PDF, Word, CSV, images. Max 10 MB per file.</p>
+          <button id="submitBtn">Submit Question</button>
+        </form>
+        <div id="submitResult" class="result hidden"></div>
+      </section>
+    </div>
+
+    <div id="tab-feedback" class="tab-content">
+      <section class="card">
+        <h2>Check Your Feedback</h2>
+        <form id="feedbackForm">
+          <label>Submission ID <input id="feedbackId" placeholder="e.g. S-20260816-AB12CD" required></label>
+          <label>Email <input id="feedbackEmail" type="email" required></label>
+          <button>Check Feedback</button>
+        </form>
+        <div id="feedbackResult" class="result hidden"></div>
+      </section>
+    </div>
+
+    <div id="tab-instructor" class="tab-content">
+      <section class="card" id="instructorSection">
+        <h2>Instructor Dashboard</h2>
+        
+        <div id="instructorLogin">
+          <label>Password <input type="password" id="instructorPassword" placeholder="Enter password"></label>
+          <button onclick="loginInstructor()">Login</button>
+          <div id="loginError" class="result hidden"></div>
         </div>
-        <label>Question<textarea id="question" rows="7" required placeholder="Type your question here..."></textarea></label>
-        <label>Upload files<input id="files" type="file" multiple accept=".pdf,.doc,.docx,.csv,.png,.jpg,.jpeg,.gif,.webp"></label>
-        <p class="hint">Accepted: PDF, Word, CSV, and common image files. Maximum 10 MB per file.</p>
-        <button id="submitBtn">Submit Question</button>
-      </form>
-      <div id="submitResult" class="result hidden"></div>
-    </section>
 
-    <!-- Student Feedback Check -->
-    <section class="card">
-      <h2>Check My Feedback</h2>
-      <form id="feedbackForm">
-        <div class="grid">
-          <label>Submission ID<input id="feedbackId" placeholder="e.g. S-20260816-AB12CD" required></label>
-          <label>Email<input id="feedbackEmail" type="email" required></label>
-        </div>
-        <button>Check Feedback</button>
-      </form>
-      <div id="feedbackResult" class="result hidden"></div>
-    </section>
+        <div id="instructorContent" class="hidden">
+          <div id="statsDashboard">
+            <div class="stat-card stat-total"><div class="stat-number" id="totalSubmissions">0</div><div class="stat-label">Total</div></div>
+            <div class="stat-card stat-pending"><div class="stat-number" id="pendingSubmissions">0</div><div class="stat-label">Pending</div></div>
+            <div class="stat-card stat-answered"><div class="stat-number" id="answeredSubmissions">0</div><div class="stat-label">Answered</div></div>
+          </div>
 
-    <!-- Instructor Section -->
-    <section class="card" id="instructorSection">
-      <h2>Instructor Dashboard</h2>
-      
-      <!-- Password Protection -->
-      <div id="instructorLogin">
-        <label>Instructor Password
-          <input type="password" id="instructorPassword" placeholder="Enter password">
-        </label>
-        <button onclick="loginInstructor()">Login</button>
-        <div id="loginError" class="result hidden"></div>
-      </div>
+          <div class="action-buttons">
+            <button onclick="loadSubmissions()" class="btn-primary">📋 Load Submissions</button>
+            <button onclick="showFindSubmission()" class="btn-secondary">🔍 Find Submission</button>
+          </div>
 
-      <!-- Instructor Content (hidden by default) -->
-      <div id="instructorContent" class="hidden">
-        <div class="grid" style="margin-bottom: 15px;">
-          <button onclick="loadSubmissions()" style="background: #059669;">📋 Load All Submissions</button>
-          <button onclick="loadSubmissionById()" style="background: #7c3aed;">🔍 Find Submission</button>
-        </div>
+          <div id="findSubmissionBox" class="hidden" style="margin-bottom:15px;">
+            <div style="display:flex;gap:10px;">
+              <input type="text" id="instructorSubmissionId" placeholder="Enter Submission ID" style="flex:1;">
+              <button onclick="loadSubmissionById()" style="padding:12px 20px;white-space:nowrap;">Search</button>
+            </div>
+          </div>
 
-        <!-- Submission ID Lookup -->
-        <div style="margin-bottom: 20px; padding: 15px; background: #f8fafc; border-radius: 8px;">
-          <div class="grid">
-            <label>Submission ID
-              <input type="text" id="instructorSubmissionId" placeholder="Enter submission ID">
-            </label>
+          <div id="submissionsList"></div>
+
+          <div id="feedbackFormContainer" class="hidden">
+            <div style="border-top:2px solid #e5e7eb;padding-top:20px;margin-top:10px;">
+              <h3>💬 Provide Feedback</h3>
+              <form id="instructorFeedbackForm">
+                <input type="hidden" id="feedbackSubmissionId">
+                <label>Student Question <div id="displayQuestion" style="background:#f1f5f9;padding:12px;border-radius:8px;margin-top:5px;font-weight:400;"></div></label>
+                <label>Your Feedback <textarea id="instructorFeedback" rows="4" placeholder="Enter your feedback here..." required></textarea></label>
+                <label>Attachment (optional) <input type="file" id="feedbackFile" accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg"></label>
+                <button type="submit" class="btn-success">Submit Feedback</button>
+              </form>
+              <div id="feedbackSubmitResult" class="result hidden"></div>
+            </div>
+          </div>
+
+          <div style="border-top:2px solid #e5e7eb;padding-top:20px;margin-top:20px;">
+            <button onclick="togglePasswordForm()" class="btn-password">🔑 Change Password</button>
+            <div id="changePasswordForm" class="hidden" style="margin-top:15px;">
+              <form id="changePasswordFormSubmit">
+                <label>Current Password <input type="password" id="currentPassword" required></label>
+                <label>New Password <input type="password" id="newPassword" required minlength="6"></label>
+                <label>Confirm Password <input type="password" id="confirmPassword" required></label>
+                <button type="submit" style="background:#dc2626;">Change Password</button>
+              </form>
+              <div id="passwordChangeResult" class="result hidden"></div>
+            </div>
           </div>
         </div>
-
-        <!-- Submissions List -->
-        <div id="submissionsList" style="max-height: 400px; overflow-y: auto; margin-bottom: 20px;"></div>
-
-        <!-- Feedback Form -->
-        <div id="feedbackFormContainer" class="hidden" style="border-top: 2px solid #e5e7eb; padding-top: 20px; margin-top: 10px;">
-          <h3>Provide Feedback</h3>
-          <form id="instructorFeedbackForm">
-            <input type="hidden" id="feedbackSubmissionId">
-            <label>Student Question
-              <div id="displayQuestion" style="background: #f1f5f9; padding: 12px; border-radius: 8px; margin-top: 5px;"></div>
-            </label>
-            <label>Instructor Feedback
-              <textarea id="instructorFeedback" rows="5" placeholder="Enter your feedback here..." required></textarea>
-            </label>
-            <label>Upload Feedback File (optional)
-              <input type="file" id="feedbackFile" accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg">
-            </label>
-            <p class="hint">Optional file to share with student (e.g., marked assignment, solution guide)</p>
-            <button type="submit" style="background: #059669;">Submit Feedback</button>
-          </form>
-          <div id="feedbackSubmitResult" class="result hidden"></div>
-        </div>
-
-        <!-- Change Password Section -->
-        <div style="border-top: 2px solid #e5e7eb; padding-top: 20px; margin-top: 20px;">
-          <h3>🔑 Change Password</h3>
-          <form id="changePasswordForm">
-            <div class="grid">
-              <label>Current Password
-                <input type="password" id="currentPassword" required>
-              </label>
-              <label>New Password
-                <input type="password" id="newPassword" required minlength="6">
-              </label>
-            </div>
-            <label>Confirm New Password
-              <input type="password" id="confirmPassword" required>
-            </label>
-            <button type="submit" style="background: #dc2626;">Change Password</button>
-          </form>
-          <div id="passwordChangeResult" class="result hidden"></div>
-        </div>
-      </div>
-    </section>
+      </section>
+    </div>
   </main>
 
   <script src="app.js"></script>
