@@ -1,9 +1,6 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbyr-Er3ENHSOO4sFKrnGWMFm_RHGXtoxBLWWspLamvQdgBUwbDED57t13UHtRi8kBCr7g/exec";
 const $ = id => document.getElementById(id);
 
-// Instructor password (change this to your desired password)
-const INSTRUCTOR_PASSWORD = "teacher2024";
-
 function showResult(el, html, error = false) {
   el.innerHTML = html;
   el.classList.remove("hidden");
@@ -94,18 +91,22 @@ document.getElementById("feedbackForm").addEventListener("submit", async e => {
 
 // ==================== INSTRUCTOR FUNCTIONS ====================
 
+let currentPassword = '';
+
 function loginInstructor() {
   const password = document.getElementById('instructorPassword').value;
   const errorEl = document.getElementById('loginError');
   
-  if (password === INSTRUCTOR_PASSWORD) {
-    document.getElementById('instructorLogin').classList.add('hidden');
-    document.getElementById('instructorContent').classList.remove('hidden');
-    showResult(errorEl, "", false);
-    loadSubmissions();
-  } else {
-    showResult(errorEl, "❌ Incorrect password. Please try again.", true);
+  if (password.length < 1) {
+    showResult(errorEl, "❌ Please enter a password.", true);
+    return;
   }
+  
+  currentPassword = password;
+  document.getElementById('instructorLogin').classList.add('hidden');
+  document.getElementById('instructorContent').classList.remove('hidden');
+  showResult(errorEl, "", false);
+  loadSubmissions();
 }
 
 async function loadSubmissions() {
@@ -113,7 +114,7 @@ async function loadSubmissions() {
   listEl.innerHTML = '<div style="text-align:center;padding:20px;">Loading submissions...</div>';
   
   try {
-    const data = await callApi('getAllSubmissions', { password: INSTRUCTOR_PASSWORD });
+    const data = await callApi('getAllSubmissions', { password: currentPassword });
     
     if (data.submissions && data.submissions.length > 0) {
       let html = `<table>
@@ -145,7 +146,14 @@ async function loadSubmissions() {
       listEl.innerHTML = '<div class="no-submissions">📭 No submissions yet.</div>';
     }
   } catch (err) {
-    listEl.innerHTML = `<div class="result error">❌ ${esc(err.message)}</div>`;
+    if (err.message.includes('Unauthorized') || err.message.includes('password')) {
+      document.getElementById('instructorLogin').classList.remove('hidden');
+      document.getElementById('instructorContent').classList.add('hidden');
+      const errorEl = document.getElementById('loginError');
+      showResult(errorEl, "❌ Incorrect password. Please try again.", true);
+    } else {
+      listEl.innerHTML = `<div class="result error">❌ ${esc(err.message)}</div>`;
+    }
   }
 }
 
@@ -171,7 +179,7 @@ async function loadSubmissionForFeedback(submissionId) {
   try {
     const data = await callApi('getSubmission', {
       submissionId: submissionId,
-      password: INSTRUCTOR_PASSWORD
+      password: currentPassword
     });
     
     document.getElementById('feedbackFormContainer').classList.remove('hidden');
@@ -224,7 +232,7 @@ document.addEventListener('DOMContentLoaded', function() {
           submissionId: submissionId,
           feedback: feedback,
           file: fileData,
-          password: INSTRUCTOR_PASSWORD
+          password: currentPassword
         });
         
         showResult(resultEl, 
@@ -234,6 +242,66 @@ document.addEventListener('DOMContentLoaded', function() {
         
         fileInput.value = '';
         loadSubmissions();
+        
+      } catch (err) {
+        showResult(resultEl, `❌ ${esc(err.message)}`, true);
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+  }
+
+  // Change Password Form
+  const changePasswordForm = document.getElementById('changePasswordForm');
+  if (changePasswordForm) {
+    changePasswordForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const resultEl = document.getElementById('passwordChangeResult');
+      const submitBtn = this.querySelector('button[type="submit"]');
+      
+      const currentPwd = document.getElementById('currentPassword').value;
+      const newPwd = document.getElementById('newPassword').value;
+      const confirmPwd = document.getElementById('confirmPassword').value;
+      
+      // Validate passwords match
+      if (newPwd !== confirmPwd) {
+        showResult(resultEl, "❌ New passwords do not match.", true);
+        return;
+      }
+      
+      if (newPwd.length < 6) {
+        showResult(resultEl, "❌ New password must be at least 6 characters.", true);
+        return;
+      }
+      
+      submitBtn.disabled = true;
+      showResult(resultEl, 'Changing password...', false);
+      
+      try {
+        await callApi('changePassword', {
+          currentPassword: currentPwd,
+          newPassword: newPwd
+        });
+        
+        // Update current password
+        currentPassword = newPwd;
+        
+        showResult(resultEl, 
+          '✅ Password changed successfully! You will be logged out in 3 seconds.', 
+          false
+        );
+        
+        this.reset();
+        
+        // Logout after 3 seconds
+        setTimeout(() => {
+          document.getElementById('instructorContent').classList.add('hidden');
+          document.getElementById('instructorLogin').classList.remove('hidden');
+          document.getElementById('instructorPassword').value = '';
+          document.getElementById('loginError').classList.add('hidden');
+          document.getElementById('passwordChangeResult').classList.add('hidden');
+          currentPassword = '';
+        }, 3000);
         
       } catch (err) {
         showResult(resultEl, `❌ ${esc(err.message)}`, true);
