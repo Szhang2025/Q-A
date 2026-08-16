@@ -1,321 +1,101 @@
-/* =========================================================
-   GENERAL
-   ========================================================= */
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#1f2937}.container{max-width:900px;margin:40px auto;padding:0 18px}header{text-align:center;margin-bottom:25px}header h1{margin-bottom:8px}header p{color:#667085}.card{background:#fff;border-radius:14px;padding:25px;margin-bottom:22px;box-shadow:0 5px 22px rgba(0,0,0,.07)}h2{margin-top:0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}label{display:block;font-weight:600;margin-bottom:17px}input,textarea{display:block;width:100%;margin-top:7px;padding:12px;border:1px solid #cbd5e1;border-radius:8px;font:inherit}textarea{resize:vertical}button{border:0;border-radius:8px;padding:12px 20px;font-weight:700;cursor:pointer;background:#2563eb;color:#fff}button:disabled{opacity:.6;cursor:wait}.hint{color:#667085;font-size:.9rem;margin-top:-8px}.result{margin-top:18px;padding:15px;border-radius:8px;background:#eef6ff}.result.error{background:#fff1f2;color:#9f1239}.hidden{display:none}a{color:#2563eb;font-weight:600}
 
-* {
-  box-sizing: border-box;
+/* Instructor Styles */
+#instructorSection {
+  border: 2px solid #d1d5db;
+  background: #fafbfc;
 }
 
-
-body {
-  margin: 0;
-
-  font-family:
-    Arial,
-    Helvetica,
-    sans-serif;
-
-  background: #f4f7fb;
-
-  color: #1f2937;
+#instructorLogin {
+  padding: 15px 0;
 }
 
-
-
-/* =========================================================
-   MAIN CONTAINER
-   ========================================================= */
-
-.container {
-
-  max-width: 900px;
-
-  margin: 40px auto;
-
-  padding: 0 18px;
+#instructorLogin label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-
-
-/* =========================================================
-   HEADER
-   ========================================================= */
-
-header {
-
-  text-align: center;
-
-  margin-bottom: 25px;
+#instructorLogin input {
+  flex: 1;
+  max-width: 300px;
 }
 
-
-header h1 {
-
-  margin-bottom: 8px;
-
-  font-size: 2rem;
-}
-
-
-header p {
-
-  color: #667085;
-
-  font-size: 1rem;
-}
-
-
-
-/* =========================================================
-   CARD
-   ========================================================= */
-
-.card {
-
-  background: white;
-
-  border-radius: 14px;
-
-  padding: 25px;
-
-  margin-bottom: 22px;
-
-  box-shadow:
-    0 5px 22px rgba(0, 0, 0, 0.07);
-}
-
-
-.card h2 {
-
-  margin-top: 0;
-
-  margin-bottom: 20px;
-}
-
-
-
-/* =========================================================
-   TWO-COLUMN GRID
-   ========================================================= */
-
-.grid {
-
-  display: grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap: 16px;
-}
-
-
-
-/* =========================================================
-   FORM LABELS
-   ========================================================= */
-
-label {
-
-  display: block;
-
-  font-weight: 600;
-
-  margin-bottom: 17px;
-}
-
-
-
-/* =========================================================
-   INPUTS
-   ========================================================= */
-
-input,
-textarea {
-
-  display: block;
-
+#submissionsList table {
   width: 100%;
-
-  margin-top: 7px;
-
-  padding: 12px;
-
-  border:
-    1px solid #cbd5e1;
-
-  border-radius: 8px;
-
-  font: inherit;
-
-  background: white;
-}
-
-
-input:focus,
-textarea:focus {
-
-  outline: none;
-
-  border-color: #2563eb;
-
-  box-shadow:
-    0 0 0 2px rgba(37, 99, 235, 0.12);
-}
-
-
-textarea {
-
-  resize: vertical;
-}
-
-
-
-/* =========================================================
-   BUTTONS
-   ========================================================= */
-
-button {
-
-  border: 0;
-
-  border-radius: 8px;
-
-  padding: 12px 20px;
-
-  font-weight: 700;
-
-  font-size: 1rem;
-
-  cursor: pointer;
-
-  background: #2563eb;
-
-  color: white;
-
-  transition:
-    background 0.2s ease,
-    transform 0.1s ease;
-}
-
-
-button:hover {
-
-  background: #1d4ed8;
-}
-
-
-button:active {
-
-  transform: translateY(1px);
-}
-
-
-button:disabled {
-
-  opacity: 0.6;
-
-  cursor: wait;
-}
-
-
-
-/* =========================================================
-   HELP TEXT
-   ========================================================= */
-
-.hint {
-
-  color: #667085;
-
+  border-collapse: collapse;
   font-size: 0.9rem;
-
-  margin-top: -8px;
-
-  margin-bottom: 18px;
 }
 
-
-
-/* =========================================================
-   RESULT BOX
-   ========================================================= */
-
-.result {
-
-  margin-top: 18px;
-
-  padding: 15px;
-
-  border-radius: 8px;
-
-  background: #eef6ff;
-
-  line-height: 1.6;
+#submissionsList th {
+  background: #f1f5f9;
+  text-align: left;
+  padding: 10px 8px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
-
-.result.error {
-
-  background: #fff1f2;
-
-  color: #9f1239;
+#submissionsList td {
+  padding: 8px;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: top;
 }
 
-
-.hidden {
-
-  display: none;
+#submissionsList tr:hover {
+  background: #f8fafc;
+  cursor: pointer;
 }
 
+#submissionsList tr.selected {
+  background: #dbeafe;
+}
 
+.submission-question {
+  max-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-/* =========================================================
-   LINKS
-   ========================================================= */
-
-a {
-
-  color: #2563eb;
-
+.submission-status {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
   font-weight: 600;
 }
 
-
-a:hover {
-
-  text-decoration: underline;
+.status-submitted {
+  background: #fef3c7;
+  color: #92400e;
 }
 
+.status-answered {
+  background: #d1fae5;
+  color: #065f46;
+}
 
+.no-submissions {
+  text-align: center;
+  padding: 30px;
+  color: #6b7280;
+}
 
-/* =========================================================
-   MOBILE
-   ========================================================= */
+#instructorContent .grid {
+  margin-bottom: 10px;
+}
 
-@media (max-width: 650px) {
+#instructorContent button {
+  width: 100%;
+}
 
-  .grid {
-
-    grid-template-columns: 1fr;
-
+@media(max-width:650px){.grid{grid-template-columns:1fr}.container{margin-top:20px}
+  #instructorLogin label {
+    flex-direction: column;
+    align-items: stretch;
   }
-
-  .container {
-
-    margin-top: 20px;
-
+  #instructorLogin input {
+    max-width: 100%;
   }
-
-  header h1 {
-
-    font-size: 1.6rem;
-
-  }
-
-  .card {
-
-    padding: 20px;
-
-  }
-
 }
