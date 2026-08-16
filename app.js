@@ -1,4 +1,4 @@
-const API_URL = "https://script.google.com/macros/s/YOUR_ACTUAL_URL_HERE/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzMivRZZIHflEhbqXiBrqUfh1AaAQHtIYJEfpMTRIwEABo9DAYGfDxN7Lcw-CrGsdKIJw/exec";
 
 function showResult(el, html, error = false) {
   el.innerHTML = html;
